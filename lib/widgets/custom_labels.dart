@@ -6,11 +6,7 @@ class Labels extends StatelessWidget {
   final String subtitulo;
 
   const Labels(
-      {Key? key,
-      required this.route,
-      required this.titulo,
-      required this.subtitulo})
-      : super(key: key);
+      {@required this.route, @required this.titulo, @required this.subtitulo});
 
   @override
   Widget build(BuildContext context) {

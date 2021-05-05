@@ -4,7 +4,7 @@ class CustomButtonBlue extends StatelessWidget {
   final String text;
   final Function() onPressed;
 
-  const CustomButtonBlue({required this.text, required this.onPressed});
+  const CustomButtonBlue({@required this.text, @required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

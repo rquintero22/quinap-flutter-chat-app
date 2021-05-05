@@ -4,8 +4,7 @@ class Logo extends StatelessWidget {
   final String logo;
   final String titulo;
 
-  const Logo({Key? key, required this.logo, required this.titulo})
-      : super(key: key);
+  const Logo({@required this.logo, @required this.titulo});
 
   @override
   Widget build(BuildContext context) {
