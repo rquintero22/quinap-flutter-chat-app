@@ -1,9 +1,14 @@
-import 'package:chat/widgets/custom_buttom_blue.dart';
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
+import 'package:chat/services/auth_service.dart';
 
 import 'package:chat/widgets/custom_input.dart';
 import 'package:chat/widgets/custom_labels.dart';
 import 'package:chat/widgets/custom_logo.dart';
+import 'package:chat/widgets/custom_buttom_blue.dart';
+import 'package:chat/helpers/mostrar_alerta.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -47,6 +52,7 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authSrv = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -67,9 +73,20 @@ class __FormState extends State<_Form> {
           // CustomInput(),
           CustomButtonBlue(
               text: 'Ingrese',
-              onPressed: () {
-                print(emailCtrl.text);
-              })
+              onPressed: authSrv.autenticando
+                  ? null
+                  : () async {
+                      FocusScope.of(context).unfocus();
+                      final loginOk = await authSrv.login(
+                          emailCtrl.text.trim(), passCtrl.text.trim());
+                      if (loginOk) {
+                        //TODO: Conetar al socket
+                        Navigator.pushReplacementNamed(context, 'usuarios');
+                      } else {
+                        mostrarAlerta(context, 'Credenciales inválidas',
+                            'Valide la información ingresada');
+                      }
+                    })
         ],
       ),
     );

@@ -1,9 +1,13 @@
-import 'package:chat/widgets/custom_buttom_blue.dart';
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+import 'package:chat/services/auth_service.dart';
 
 import 'package:chat/widgets/custom_input.dart';
 import 'package:chat/widgets/custom_labels.dart';
 import 'package:chat/widgets/custom_logo.dart';
+import 'package:chat/widgets/custom_buttom_blue.dart';
+import 'package:chat/helpers/mostrar_alerta.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -48,8 +52,9 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authSrv = Provider.of<AuthService>(context);
     return Container(
-      margin: EdgeInsets.only(top: 40),
+      margin: EdgeInsets.only(top: 5),
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
@@ -73,10 +78,27 @@ class __FormState extends State<_Form> {
           ),
           // CustomInput(),
           CustomButtonBlue(
-              text: 'Ingrese',
-              onPressed: () {
-                print(emailCtrl.text);
-              })
+              text: 'Registar',
+              onPressed: authSrv.autenticando
+                  ? null
+                  : () async {
+                      FocusScope.of(context).unfocus();
+                      final registerOk = await authSrv.register(
+                          nameCtrl.text.trim(),
+                          emailCtrl.text.trim(),
+                          passCtrl.text.trim());
+                      if (registerOk == true) {
+                        mostrarAlerta(context, 'Usuario creado',
+                            'Usuario creado satisfactoriamente.');
+
+                        //TODO: Conetar al socket
+
+                        Navigator.pushReplacementNamed(context, 'usuarios');
+                      } else {
+                        mostrarAlerta(context, 'Credenciales inválidas',
+                            'Valide la información ingresada');
+                      }
+                    })
         ],
       ),
     );
