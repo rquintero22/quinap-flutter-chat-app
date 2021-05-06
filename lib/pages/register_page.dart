@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:chat/services/auth_service.dart';
+import 'package:chat/services/socket_service.dart';
 
 import 'package:chat/widgets/custom_input.dart';
 import 'package:chat/widgets/custom_labels.dart';
@@ -53,6 +54,8 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authSrv = Provider.of<AuthService>(context);
+    final socketSrv = Provider.of<SocketService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 5),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -91,7 +94,7 @@ class __FormState extends State<_Form> {
                         mostrarAlerta(context, 'Usuario creado',
                             'Usuario creado satisfactoriamente.');
 
-                        //TODO: Conetar al socket
+                        socketSrv.connect();
 
                         Navigator.pushReplacementNamed(context, 'usuarios');
                       } else {
